@@ -1,27 +1,15 @@
 ---
-const landingPage = "/Landing";
-const Feed = "/Feed";
+const landingPage = "/Home"; 
+const Sell = "/Sell";
+const Saved = "/Saved";
+const Profile = "/Profile";
 
-function toggleMenu() {
-    const mobileNav = document.getElementById('mobileNav');
-    if (mobileNav) {
-      mobileNav.classList.toggle('open');
-    }
-  }
+
+const currentPath = Astro.url.pathname;
+
 ---
 
 <style>
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    font-family: "Inter", Arial, sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    color: var(--text-main);
-    display: flex;
-    flex-direction: column;
-  }
   header {
     background: var(--bg-header);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -66,18 +54,25 @@ function toggleMenu() {
       background 0.2s,
       color 0.2s;
   }
-  .nav-link:hover,
+.nav-link:active{
+    background: #ff9900;
+    color: #fff;
+}
   .nav-link.active {
     background: #ff9900;
     color: #fff;
   }
+  .nav-link:hover:not(.active) { 
+    background: #ffc266;
+    color: #374151; 
+  }
+
 
   .menu-icon {
     display: none;
     cursor: pointer;
     font-size: 1.5rem;
     color: #374151;
-    z-index: 100;
   }
 
   .mobile-nav {
@@ -86,52 +81,49 @@ function toggleMenu() {
     width: 100%;
     margin-top: 0.5rem;
     gap: 0.5rem;
-    background: var(--bg-header);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    padding-bottom: 1rem;
   }
 
-  .mobile-nav-link {
+  .mobile-nav a {
     display: block;
     padding: 0.75rem 1rem;
     text-decoration: none;
     color: #374151;
     font-weight: 500;
     border-radius: 6px;
-    transition: background 0.2s, color 0.2s;
+    transition:
+      background 0.2s,
+      color 0.2s;
     text-align: left;
   }
 
-  .mobile-nav-link:hover,
-  .mobile-nav-link.active {
+  .mobile-nav a:hover,
+  .mobile-nav a.active {
     background: #ff9900;
     color: #fff;
   }
-
 
   @media (max-width: 700px) {
     .header-content {
       flex-direction: row;
       align-items: center;
+      justify-content: space-between;
     }
     nav {
-      display: none; 
+      display: none;
     }
     .menu-icon {
-      display: block; 
-      z-index: 100;
-      cursor: pointer;
+      display: block;
     }
-    .mobile-nav {
-      display: none; 
-      position: absolute;
-      top: 60px;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-    }
+
     .mobile-nav.open {
-      display: flex; 
+      display: flex;
+    }
+
+    header {
+      padding-bottom: 0;
+    }
+    .header-content {
+      padding-bottom: 0.7rem;
     }
   }
 </style>
@@ -142,18 +134,29 @@ function toggleMenu() {
       <span class="logo-icon">🎒</span>
       KwikMart
     </div>
-    <div class="menu-icon" onclick=toggleMenu()>Menu</div>
-    <nav>
-      <a class="nav-link active" href={Feed}>Feed</a>
-      <a class="nav-link" href="/sell">Sell</a>
-      <a class="nav-link" href="/saved">Saved</a>
-      <a class="nav-link" href="/profile">Profile</a>
+    <div class="menu-icon" id="menuIcon">☰</div>
+    <nav id="desktopNav">
+      <a class="nav-link {currentPath === landingPage || currentPath === Feed ? 'active' : ''}" href={landingPage}>Feed</a>
+      <a class="nav-link {currentPath === Sell ? 'active' : ''}" href={Sell}>Sell</a>
+      <a class="nav-link {currentPath === Saved ? 'active' : ''}" href={Saved}>Saved</a>
+      <a class="nav-link {currentPath === Profile ? 'active' : ''}" href={Profile}>Profile</a>
     </nav>
   </div>
   <div class="mobile-nav" id="mobileNav">
-    <a class="mobile-nav-link active" href={Feed}>Feed</a>
-    <a class="mobile-nav-link" href="/sell">Sell</a>
-    <a class="mobile-nav-link" href="/saved">Saved</a>
-    <a class="mobile-nav-link" href="/profile">Profile</a>
+    <a class="nav-link {currentPath === landingPage || currentPath === Feed ? 'active' : ''}" href={landingPage}>Feed</a>
+    <a class="nav-link {currentPath === Sell ? 'active' : ''}" href={Sell}>Sell</a>
+    <a class="nav-link {currentPath === Saved ? 'active' : ''}" href={Saved}>Saved</a>
+    <a class="nav-link {currentPath === Profile ? 'active' : ''}" href={Profile}>Profile</a>
   </div>
 </header>
+
+<script>
+  const menuIcon = document.getElementById("menuIcon");
+  const mobileNav = document.getElementById("mobileNav");
+
+  if (menuIcon && mobileNav) {
+    menuIcon.addEventListener("click", () => {
+      mobileNav.classList.toggle("open");
+    });
+  }
+</script>

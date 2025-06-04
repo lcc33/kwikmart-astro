@@ -1,27 +1,138 @@
 ---
-const landingPage = "/Landing";
+const landingPage = "/Home";
 const welcomeImage = "/favicon.png";
-
 ---
 
-<div
-  style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; background: #f5f5f5;"
->
-  <img
-    src={welcomeImage}
-    alt="Welcome to Our Kwik"
-    style="max-width: 350px; border-radius: 12px; margin-bottom: 2rem;"
-  />
-  <h1 style="font-size: 2.5rem; color: #222; margin-bottom: 1rem;">
-    Welcome to KwikMart!
-  </h1>
-  <p style="font-size: 1.2rem; color: #555; margin-bottom: 2rem;">
-    Discover amazing deals and shop your favorite products.
-  </p>
-  <a
-    href={landingPage}
-    style="padding: 0.75rem 2rem; background: #00b359; color: #fff; border-radius: 8px; text-decoration: none; font-size: 1.1rem; font-weight: 600; transition: background 0.2s;"
-  >
-    Get Started
-  </a>
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(90deg, #fff8f0 60%, #ffe5b4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .loader-text {
+    font-family: "Inter", Arial, sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: transparent;
+    background: linear-gradient(90deg, #ff9900, rgb(213, 230, 223), rgb(84, 126, 87));
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-size: 200% 100%;
+    animation: fill-empty 3s infinite;
+  }
+
+  @keyframes fill-empty {
+    0% {
+      background-position: 100% 0;
+    }
+    50% {
+      background-position: 0% 0;
+    }
+    100% {
+      background-position: 100% 0;
+    }
+  }
+
+  .hidden {
+    display: none !important;
+    opacity: 0;
+  }
+
+  .main-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    height: 100%;
+    background: #e4d3d3;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .main-content-wrapper img {
+    max-width: 350px;
+    border-radius: 60%;
+    width: 100%;
+    height: auto;
+    margin-bottom: 2rem;
+  }
+
+  .main-content-wrapper h1 {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  .main-content-wrapper p {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: #555;
+    margin-bottom: 2rem;
+  }
+
+  .main-content-wrapper a {
+    padding: 0.75rem 2rem;
+    background: #00b359;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .main-content-wrapper a:hover {
+    background: #008f47;
+  }
+</style>
+
+<div id="mainContent" class="main-content-wrapper">
+  <img src={welcomeImage} alt="Welcome to Our Kwik" />
+  <h1>Welcome to KwikMart!</h1>
+  <p>Discover amazing deals and shop your favorite products.</p>
+  <a id="getStartedBtn" href={landingPage}>Get Started</a>
 </div>
+
+<div id="loaderOverlay" class="loader-overlay">
+  <div class="loader-text">KwikMart</div>
+</div>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    const loaderOverlay = document.getElementById("loaderOverlay");
+    if (loaderOverlay) {
+      loaderOverlay.classList.add("hidden");
+    }
+  });
+
+  document
+    .getElementById("getStartedBtn")
+    .addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const mainContent = document.getElementById("mainContent");
+      const loaderOverlay = document.getElementById("loaderOverlay");
+
+      if (mainContent) mainContent.classList.add("hidden");
+      if (loaderOverlay) loaderOverlay.classList.remove("hidden");
+
+      setTimeout(() => {
+        window.location.href = this.href;
+      }, 5000);
+    });
+</script>

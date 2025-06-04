@@ -1,0 +1,410 @@
+---
+import Navbar from "../components/Navbar.astro";
+import Layout from "../layouts/Layout.astro";
+
+function toggleMenu() {
+  const mobileNav = document.getElementById("mobileNav");
+  if (mobileNav) {
+    mobileNav.classList.toggle("open");
+  }
+}
+const feedItems = [
+  {
+    img: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80",
+    alt: "MacBook Air for sale",
+    avatar: "JD",
+    user: "Jane Doe",
+    time: "10 min ago",
+    title: "Selling: MacBook Air 2020",
+    desc: "Lightly used, perfect condition. Comes with charger and original box. DM for price or more info!",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80",
+    alt: "Calculus Textbook",
+    avatar: "AK",
+    user: "Alex Kim",
+    time: "30 min ago",
+    title: "Looking for: Calculus Textbook",
+    desc: "Anyone selling Stewart Calculus 8th Edition? Need it for next semester. Please reach out if you have one!",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=400&q=80",
+    alt: "Bluetooth Speaker",
+    avatar: "SM",
+    user: "Sam M.",
+    time: "1 hr ago",
+    title: "Swap: Bluetooth Speaker for Headphones",
+    desc: "I have a JBL speaker, looking to swap for decent headphones. Let me know if interested!",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
+    alt: "Dorm Essentials",
+    avatar: "LM",
+    user: "Lisa M.",
+    time: "2 hr ago",
+    title: "Selling: Dorm Essentials Bundle",
+    desc: "Mini fridge, kettle, and lamp. All in good condition. Perfect for new students!",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
+    alt: "Bike for sale",
+    avatar: "RT",
+    user: "Rita T.",
+    time: "3 hr ago",
+    title: "Selling: Mountain Bike",
+    desc: "Sturdy and reliable. Great for getting around campus. DM for price!",
+  },
+];
+---
+
+<Layout>
+  <style>
+    :root {
+      --bg: #fff8f0;
+      --text-main: #23272f;
+      --primary: #ff9900;
+      --primary-dark: #e67c00;
+      --accent: #2e8b57;
+      --bg-header: #ffffff;
+      --text-muted: #7c7c7c;
+      --border: #f1f1f1;
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      --radius: 16px;
+    }
+
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: "Inter", Arial, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero {
+      background: linear-gradient(90deg, #fff8f0 60%, #ffe5b4 100%);
+      padding: 2.5rem 1rem 2rem 1rem;
+      text-align: center;
+      margin-top: 1px;
+    }
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 0.7rem;
+    }
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .search-bar {
+      max-width: 420px;
+      margin: 0 auto;
+      display: flex;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .search-bar input {
+      flex: 1;
+      border: none;
+      padding: 0.8rem 1rem;
+      font-size: 1rem;
+      outline: none;
+      background: transparent;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0 1.2rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover {
+      background: var(--accent);
+    }
+    .feed-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin: 2rem auto 0 auto;
+      width: 100%;
+      max-width: 1200px;
+      padding: 0 1.5rem;
+      box-sizing: border-box;
+    }
+    .feed-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition:
+        box-shadow 0.13s,
+        border 0.13s,
+        transform 0.13s;
+      overflow: hidden;
+      position: relative;
+    }
+    .feed-card:hover {
+      box-shadow: 0 6px 24px rgba(255, 153, 0, 0.1);
+      border: 1.5px solid var(--primary);
+      transform: translateY(-2px) scale(1.01);
+    }
+    .feed-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #f3f3f3;
+    }
+    .feed-content {
+      padding: 1.1rem 1rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+    .feed-header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .feed-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(
+        135deg,
+        var(--primary) 0%,
+        var(--accent) 100%
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 1px 4px rgba(255, 153, 0, 0.1);
+      border: 2px solid #fff;
+    }
+    .feed-user {
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 1rem;
+    }
+    .feed-time {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-left: 0.5rem;
+    }
+    .feed-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      letter-spacing: 0.01em;
+    }
+    .feed-desc {
+      font-size: 1rem;
+      color: #555;
+    }
+    .feed-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .feed-action-btn {
+      background: #fff8f0;
+      border: 1px solid var(--primary);
+      color: var(--primary-dark);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.35rem 1.1rem;
+      border-radius: 8px;
+      transition:
+        background 0.15s,
+        color 0.15s,
+        box-shadow 0.15s;
+      box-shadow: 0 1px 4px rgba(255, 153, 0, 0.07);
+      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .feed-action-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary-dark);
+    }
+
+    footer {
+      background: #f7f7fa;
+      border-top: 1px solid #e4e4e4;
+      padding: 40px 0 20px 0;
+      font-family: "Inter", Arial, sans-serif;
+      color: #222;
+    }
+    footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    footer section {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    footer .about a,
+    footer .support a,
+    footer .media a {
+      color: #222;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+      padding: 0 6px;
+    }
+    footer .about a:hover,
+    footer .support a:hover,
+    footer .media a:hover {
+      color: #00b359;
+      text-decoration: underline;
+    }
+    footer .media a {
+      font-size: 17px;
+    }
+    footer p {
+      color: #888;
+      font-size: 14px;
+      margin-top: 18px;
+      margin-bottom: 0;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      footer section {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .header-content,
+      .feed-container {
+        padding: 0 2vw;
+      }
+      .feed-container {
+        grid-template-columns: 1fr;
+      }
+      .hero-title {
+        font-size: 1.5rem;
+      }
+    }
+    @media (max-width: 600px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .logo {
+        font-size: 1.3rem;
+      }
+      nav {
+        gap: 0.7rem;
+      }
+      .feed-img {
+        height: 140px;
+      }
+      .feed-title {
+        font-size: 1rem;
+      }
+      .feed-desc {
+        font-size: 0.97rem;
+      }
+      .feed-card {
+        border-radius: 10px;
+      }
+    }
+    @media (max-width: 400px) {
+      .feed-content {
+        padding: 0.7rem 0.4rem 0.7rem 0.4rem;
+      }
+      .feed-img {
+        height: 90px;
+      }
+    }
+  </style>
+
+  <div>
+    <Navbar />
+
+    <section class="hero">
+      <div class="hero-title">Welcome to KwikMart</div>
+      <div class="hero-desc">
+        Buy, sell, and swap anything with fellow students. Fast, safe, and
+        campus-focused.
+      </div>
+      <form class="search-bar" onsubmit="event.preventDefault();">
+        <input
+          type="text"
+          placeholder="Search for books, gadgets, or anything.."
+        />
+        <button type="submit">🔍</button>
+      </form>
+    </section>
+    <main>
+      <div class="feed-container">
+        {
+          feedItems.map((item) => (
+            <div class="feed-card">
+              <img class="feed-img" src={item.img} alt={item.alt} />
+              <div class="feed-content">
+                <div class="feed-header">
+                  <div class="feed-avatar">{item.avatar}</div>
+                  <div class="feed-user">
+                    {item.user} <span class="feed-time">· {item.time}</span>
+                  </div>
+                </div>
+                <div class="feed-title">{item.title}</div>
+                <div class="feed-desc">{item.desc}</div>
+                <div class="feed-actions">
+                  <button class="feed-action-btn">💬 Message</button>
+                  <button class="feed-action-btn">⭐ Save</button>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </main>
+    <footer>
+      <section class="about">
+        <a href="#">About KwikMart</a>
+        <a href="#">Terms and Conditions</a>
+        <a href="#">Privacy Policy</a>
+      </section>
+      <section class="support">
+        <a href="#">Support</a>
+        <a href="#">FAQs</a>
+      </section>
+      <section class="media">
+        <a href="#">Instagram</a>
+        <a href="#">Youtube</a>
+        <a href="#">Twitter</a>
+        <a href="#">Linkedin</a>
+      </section>
+      <p>&copy; 2024 KwikMart. Made by Kindra.</p>
+    </footer>
+  </div>
+</Layout>
